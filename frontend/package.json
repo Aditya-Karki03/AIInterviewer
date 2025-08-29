@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/antd": "^0.12.32",
+    "@types/axios": "^0.9.36",
+    "antd": "^5.27.1",
+    "axios": "^1.11.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-hook-form": "^7.62.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
