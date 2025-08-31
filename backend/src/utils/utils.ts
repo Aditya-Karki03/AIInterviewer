@@ -1,4 +1,5 @@
 import { Response } from "express";
+import jwt from "jsonwebtoken";
 
 //success response with data and default status code
 export const ok = (res: Response, data: any, statusCode: number = 200) => {
@@ -18,4 +19,16 @@ export const fail = (
     ok: false,
     message,
   });
+};
+
+//sign jwt token
+interface userData {
+  userEmail: string;
+}
+export const signToken = (data: userData) => {
+  //get secret key from env
+  const secretKey = process.env.SECRET_KEY || "";
+  //sign the jwt and return
+  const token = jwt.sign(data, secretKey);
+  return token;
 };

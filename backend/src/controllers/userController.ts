@@ -3,7 +3,8 @@ import userSchema from "../schemas/userSchema";
 import { ok, fail } from "../utils/utils";
 import db from "../db/db.schema";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { signToken } from "../utils/utils";
+import is from "zod/v4/locales/is.cjs";
 
 class UserController {
   //register user
@@ -48,11 +49,11 @@ class UserController {
       };
 
       //signing the token
-      const token = jwt.sign(data, jwtSecret);
+      const token = signToken(data);
 
       //send cookie
       res.cookie("token", token);
-      //    @ts-ignore
+      //@ts-ignore
       return ok(res, { email: userData?.email }, 201);
     } catch (error) {
       // Handle error if email already exists
@@ -61,6 +62,59 @@ class UserController {
       }
 
       // Handle other errors
+      return fail(res, "Something went wrong. Please try again", 500);
+    }
+  }
+
+  //login
+  async login(req: Request, res: Response) {
+    //get email and password from the body
+    const { email, password } = req.body;
+
+    //if either no email or password return fail response
+    if (!email || !password)
+      return fail(res, "Email and Password are required", 403);
+
+    //validate email & password
+    const validation = userSchema.safeParse({ email, password });
+
+    //if validation fails return fail response
+    if (!validation.success) {
+      return fail(res, validation.error.message, 403);
+    }
+
+    //find the user in the databse
+    try {
+      const userData = db
+        .prepare("SELECT * FROM users WHERE email=?")
+        .get(email.trim());
+      //if no user data found
+      if (!userData) return fail(res, "Please sign up  to continue", 403);
+
+      //password verification
+      const isPasswordValid = await bcrypt.compare(
+        password.trim(),
+        //@ts-ignore
+        userData?.password
+      );
+      if (!isPasswordValid) return fail(res, "Invalid password", 402);
+
+      //if pwssword verifed than sign jwt token
+      const data = {
+        //@ts-ignore
+        userEmail: userData?.email,
+      };
+
+      //signing the token
+      const token = signToken(data);
+
+      //send cookie
+      res.cookie("token", token);
+      //send response
+      //@ts-ignore
+      return ok(res, { email: userData?.email }, 200);
+    } catch (error) {
+      // Handle error
       return fail(res, "Something went wrong. Please try again", 500);
     }
   }
