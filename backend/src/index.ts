@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import appRouterV1 from "./routes/v1";
+import db, { userTableCmd } from "./db/db.schema";
 
 //to use env variables
 dotenv.config();
@@ -12,6 +13,9 @@ const port = process.env.PORT || 3000;
 
 //middleware to use parse the body
 app.use(express.json());
+
+//execute create table command
+db.exec(userTableCmd);
 
 //routing every request to version 1 routes
 app.use(appRouterV1);
