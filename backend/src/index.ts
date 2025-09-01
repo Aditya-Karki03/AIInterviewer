@@ -1,7 +1,15 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import appRouterV1 from "./routes/v1";
-import db, { userTableCmd } from "./db/db.schema";
+import db, {
+  userTableCmd,
+  practiceSessionTableCmd,
+  profileTableCmd,
+  qaTableCmd,
+  skillProfileTableCmd,
+  skillTableCmd,
+  userPracticeSessionTableCmd,
+} from "./db/db.schema";
 import cookies from "cookie-parser";
 
 // to use env variables
@@ -18,8 +26,16 @@ app.use(express.json());
 // middleware to parse the cookies
 app.use(cookies());
 
-// execute create table command
-db.exec(userTableCmd);
+// execute create table commands
+db.exec(
+  userTableCmd +
+    practiceSessionTableCmd +
+    profileTableCmd +
+    qaTableCmd +
+    skillProfileTableCmd +
+    skillTableCmd +
+    userPracticeSessionTableCmd
+);
 
 // routing every request to version 1 routes
 app.use(appRouterV1);
