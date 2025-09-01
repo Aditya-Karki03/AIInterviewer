@@ -5,11 +5,14 @@ function App() {
     <div
       className="       
       min-h-screen
+      max-w-11/12
       flex
       items-center
       justify-center
       bg-gray-900
-      border
+      mx-auto
+
+
     "
     >
       <Outlet />
