@@ -1,21 +1,23 @@
+import React from "react";
+import { registerSchema } from "../Schema/schema.login";
 import { BotMessageSquare } from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { loginSchema } from "../Schema/schema.login";
 import { zodResolver } from "@hookform/resolvers/zod/src/zod.js";
 import { Link } from "react-router-dom";
 
 type FormValues = {
   email: string;
   password: string;
+  confirmPassword: string;
 };
 
-const Login = () => {
+const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
   });
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data);
@@ -48,13 +50,24 @@ const Login = () => {
           <span className="text-red-500 text-sm ">
             {errors.password?.message}
           </span>
+          <input
+            type="password"
+            {...register("confirmPassword")}
+            placeholder="Confirm Password"
+            className={`bg-gray-700 text-gray-100 rounded-md border p-2 outline-none ${
+              errors.confirmPassword ? "border-red-500" : "border-white/20"
+            }`}
+          />
+          <span className="text-red-500 text-sm ">
+            {errors.confirmPassword?.message}
+          </span>
           <button className="bg-blue-500 text-white rounded-md p-2 mt-3 cursor-pointer hover:bg-blue-600 transition">
-            Login
+            Register
           </button>
           <span className="mx-auto">
-            New User?{" "}
-            <Link className="text-blue-500" to="/register">
-              Register
+            Already have an account?{" "}
+            <Link className="text-blue-500" to="/">
+              Login
             </Link>
           </span>
         </div>
@@ -63,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
