@@ -1,15 +1,15 @@
 import express from "express";
-import UserController from "../../controllers/userController";
+import { userAuth } from "../../middleware/userAuth";
+import { authRouter } from "./authRoutes";
+import { profileRouter } from "./profileRoutes";
 
 const appRouterV1 = express.Router();
 
-//create objects of controllers
-const userController = new UserController();
+// login & sign up route
+appRouterV1.use("/api/v1/user", authRouter);
 
-//login route
-appRouterV1.use("/login", userController.login);
-
-//register route
-appRouterV1.post("/register", userController.register);
+// user profile route
+// userAuth middleware to ensure only authenticated users can access this route
+appRouterV1.use("/api/v1/profile", userAuth, profileRouter);
 
 export default appRouterV1;

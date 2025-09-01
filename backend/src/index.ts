@@ -29,9 +29,9 @@ app.use(cookies());
 // execute create table commands
 db.exec(
   userTableCmd +
-    practiceSessionTableCmd +
     profileTableCmd +
     qaTableCmd +
+    practiceSessionTableCmd +
     skillProfileTableCmd +
     skillTableCmd +
     userPracticeSessionTableCmd
