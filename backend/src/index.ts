@@ -1,26 +1,46 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import appRouterV1 from "./routes/v1";
-import db, { userTableCmd } from "./db/db.schema";
+import db, {
+  userTableCmd,
+  practiceSessionTableCmd,
+  profileTableCmd,
+  qaTableCmd,
+  skillProfileTableCmd,
+  skillTableCmd,
+  userPracticeSessionTableCmd,
+} from "./db/db.schema";
+import cookies from "cookie-parser";
 
-//to use env variables
+// to use env variables
 dotenv.config();
 
-//initializing express application
+// initializing express application
 const app = express();
 
 const port = process.env.PORT || 3000;
 
-//middleware to use parse the body
+// middleware to use parse the body
 app.use(express.json());
 
-//execute create table command
-db.exec(userTableCmd);
+// middleware to parse the cookies
+app.use(cookies());
 
-//routing every request to version 1 routes
+// execute create table commands
+db.exec(
+  userTableCmd +
+    profileTableCmd +
+    qaTableCmd +
+    practiceSessionTableCmd +
+    skillProfileTableCmd +
+    skillTableCmd +
+    userPracticeSessionTableCmd
+);
+
+// routing every request to version 1 routes
 app.use(appRouterV1);
 
-//server listening port
+// server listening port
 app.listen(port, () => {
   console.log(`app is listening at port`, port);
 });

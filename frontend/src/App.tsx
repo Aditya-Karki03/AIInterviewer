@@ -1,17 +1,21 @@
-import Login from "./components/Login";
+import { Outlet } from "react-router-dom";
 
 function App() {
   return (
     <div
-      className="
+      className="       
       min-h-screen
+      max-w-11/12
       flex
       items-center
       justify-center
       bg-gray-900
+      mx-auto
+
+
     "
     >
-      <Login />
+      <Outlet />
     </div>
   );
 }
