@@ -11,6 +11,7 @@ import db, {
   userPracticeSessionTableCmd,
 } from "./db/db.schema";
 import cookies from "cookie-parser";
+import cors from "cors";
 
 // to use env variables
 dotenv.config();
@@ -19,6 +20,9 @@ dotenv.config();
 const app = express();
 
 const port = process.env.PORT || 3000;
+
+//enable all CORS requests
+app.use(cors());
 
 // middleware to use parse the body
 app.use(express.json());
