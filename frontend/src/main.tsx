@@ -7,6 +7,8 @@ import Login from "./components/Login.tsx";
 import Register from "./components/Register.tsx";
 import Dashboard from "./components/Dashboard.tsx";
 import Sidebar from "./components/Sidebar.tsx";
+import ProfileSetup from "./components/ProfileSetup.tsx";
+import Practice from "./components/Practice.tsx";
 // import ProtectedRoutes from "./components/ProctedRoutes.tsx";
 
 const router = createBrowserRouter([
@@ -35,6 +37,22 @@ const router = createBrowserRouter([
         element: (
           // <ProtectedRoutes>
           <Sidebar />
+          // </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/set-profile",
+        element: (
+          // <ProtectedRoutes>
+          <ProfileSetup />
+          // </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/practice",
+        element: (
+          // <ProtectedRoutes>
+          <Practice />
           // </ProtectedRoutes>
         ),
       },
