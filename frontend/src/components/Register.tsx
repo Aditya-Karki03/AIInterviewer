@@ -23,6 +23,7 @@ const Register = () => {
     //make api call
     fetch("http://localhost:3001/api/v1/user/register", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
