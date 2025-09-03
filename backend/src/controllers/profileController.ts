@@ -6,13 +6,13 @@ class ProfileController {
   //send profile
   async postProfile(req: Request, res: Response) {
     //get data out of the body
-    const { job, experience, interviewType, skillName } = req.body;
+    const { job, experience, interviewType, skillNames } = req.body;
 
     //extracting userId from req.user
     const { id } = req.user;
 
     //all fields are required
-    if (!job || !experience || !interviewType || !skillName)
+    if (!job || !experience || !interviewType || !skillNames)
       return fail(res, "All fields are required", 403);
 
     //create profile
@@ -36,12 +36,16 @@ class ProfileController {
       );
 
       // execute the insert query to skills table
-      const skillResult = insQuerySkills.run(skillName.trim());
+      // skillName is an array hence running in a loop
+      // TODO: add transaction a better method if more than 50 array
+      for (const skill of skillNames) {
+        insQuerySkills.run(skill.trim());
+      }
 
       //get skill data
-      const skillData = db
-        .prepare("SELECT skillName FROM skills WHERE id=?")
-        .get(skillResult.lastInsertRowid);
+      // const skillData = db
+      //   .prepare("SELECT skillName FROM skills WHERE id=?")
+      //   .get(skillResult.lastInsertRowid);
 
       //get profile data
       const profileData = db
@@ -53,7 +57,7 @@ class ProfileController {
       //creating result data
       const result = {
         profile: profileData,
-        skill: skillData,
+        skill: skillNames,
       };
 
       //return sucess response
