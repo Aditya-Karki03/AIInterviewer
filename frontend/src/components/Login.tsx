@@ -2,7 +2,7 @@ import { BotMessageSquare } from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { loginSchema } from "../Schema/schema.login";
 import { zodResolver } from "@hookform/resolvers/zod/src/zod.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type FormValues = {
   email: string;
@@ -10,6 +10,7 @@ type FormValues = {
 };
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -33,8 +34,8 @@ const Login = () => {
           throw new Error("Login Failed");
         }
       })
-      .then((data) => {
-        console.log(data);
+      .then(() => {
+        navigate("/dashboard");
       })
       .catch((error) => {
         console.error(error);
