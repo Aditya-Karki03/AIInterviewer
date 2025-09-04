@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import db from "../db/db.schema";
-import { all } from "axios";
 import { fail, ok } from "../utils/utils";
 
 class DashboardController {
-  async getDashboardData(req: Request, res: Response) {
+  getDashboardData = async (req: Request, res: Response) => {
     // TODO: send Job Role, Expertise level, Skills, Interview Type
     // TODO: Send a list of practice Sessions done as well
 
@@ -38,18 +37,19 @@ class DashboardController {
         //@ts-ignore
         .all(profileData?.id);
 
-      // as soon as I get the profile data. I curate the question
       // & save it in db
+
       const result = {
         profileDetails: profileData,
+
         skills: allSkillsForAProfile,
       };
+
       //send the response
       return ok(res, result, 201);
     } catch (error) {
-      console.log(error);
       return fail(res, "Internal Server Error", 500);
     }
-  }
+  };
 }
 export default DashboardController;
