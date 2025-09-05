@@ -102,12 +102,17 @@ Example:
       const insQATableQuery = db.prepare(
         "INSERT INTO qa (userId, practiceId, question) VALUES (?,?,?)"
       );
+
       // run the above query in a loop in order to insert the questions
-      questionsArray.forEach((question: string) => {
-        insQATableQuery.run(id, userPraticeId, question);
+      const questionWithIds = questionsArray.map((question: string) => {
+        const result = insQATableQuery.run(id, userPraticeId, question);
+        return {
+          id: result.lastInsertRowid,
+          question,
+        };
       });
 
-      return ok(res, questionsArray, 201);
+      return ok(res, questionWithIds, 201);
     } catch (error) {
       console.log(error);
       return fail(res, "Internal Server Error", 500);
@@ -120,14 +125,56 @@ Example:
     // practice id is needed
 
     // get practiceId and userId
-    const { practiceId } = req.query;
+    const { practiceId } = req.params;
     const { id } = req.user;
     try {
       const getQuestionsAndAnswersQuery = db.prepare(
         "SELECT * FROM qa WHERE userId=? AND practiceId = ? "
       );
-      const questionsAndAnswers = getQuestionsAndAnswersQuery.all(id, 3);
+      const questionsAndAnswers = getQuestionsAndAnswersQuery.all(
+        id,
+        practiceId
+      );
       console.log(questionsAndAnswers);
+    } catch (error) {
+      console.log(error);
+      return fail(res, "Internal Server Error", 500);
+    }
+  }
+
+  // answers submisstion
+  async submitAnswers(req: Request, res: Response) {
+    const { user } = req;
+    const userId = user.id;
+    //below is the question id
+    const { id } = req.params;
+
+    // get all the data from the body
+    const { answer, skip, review, submit } = req.body;
+
+    // we will be using update query to update the answer to existing questions
+    // idenfity each question with the id
+    const updateQA = db.prepare(
+      `UPDATE qa
+   SET answer = ?, skip = ?, review = ?, submit = ?
+   WHERE id = ? AND userId = ?`
+    );
+
+    try {
+      const result = updateQA.run(
+        answer ?? null,
+        skip ?? false,
+        review ?? false,
+        submit ?? false,
+        id,
+        userId
+      );
+
+      // in case no matching record found
+      if (result.changes === 0) {
+        return fail(res, "No record found to update", 407);
+      }
+      return ok(res, { updated: true }, 201);
     } catch (error) {
       console.log(error);
       return fail(res, "Internal Server Error", 500);
