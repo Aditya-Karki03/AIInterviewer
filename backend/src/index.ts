@@ -21,8 +21,8 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
-//enable all CORS requests
-app.use(cors());
+//enable all CORS for 3001 allowing cookies to be sent to backend without CORS issues
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 // middleware to use parse the body
 app.use(express.json());

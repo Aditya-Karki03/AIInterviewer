@@ -2,7 +2,7 @@ import { registerSchema } from "../Schema/schema.login";
 import { BotMessageSquare } from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/src/zod.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type FormValues = {
   email: string;
@@ -11,6 +11,7 @@ type FormValues = {
 };
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,10 +20,10 @@ const Register = () => {
     resolver: zodResolver(registerSchema),
   });
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
     //make api call
     fetch("http://localhost:3001/api/v1/user/register", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -34,8 +35,9 @@ const Register = () => {
         }
         return res.json();
       })
-      .then((data) => {
-        console.log(data);
+      .then(() => {
+        //if no issues registration navigate to set-profile
+        navigate("/set-profile");
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);

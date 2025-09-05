@@ -2,15 +2,17 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { jobs, interviewTypes } from "../utils/jsons";
 import { zodResolver } from "@hookform/resolvers/zod/src/zod.js";
 import { ProfileSetupSchema } from "../Schema/schema.profile-setup";
+import { useNavigate } from "react-router-dom";
 
 interface FormValues {
   job: string;
   experience: "Entry" | "Mid" | "Senior";
-  skills: string[];
+  skillNames: string[];
   interviewType: string;
 }
 
 const ProfileSetup = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -20,8 +22,24 @@ const ProfileSetup = () => {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    alert("hello world");
-    console.log(data);
+    // api request to send the data
+    fetch("http://localhost:3001/api/v1/profile/create", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json ",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+      })
+      .then(() => {
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
   };
   console.log(errors);
   return (
@@ -100,9 +118,9 @@ const ProfileSetup = () => {
           <input
             type="text"
             className={`border px-2 py-3 rounded-md outline-none ${
-              errors.skills ? "border-red-500" : "border-white/40"
+              errors.skillNames ? "border-red-500" : "border-white/40"
             }`}
-            {...register("skills", {
+            {...register("skillNames", {
               setValueAs: (val: string) =>
                 val
                   .split(",")
@@ -112,7 +130,7 @@ const ProfileSetup = () => {
             placeholder="Enter your skills (e.g. React, Node, SQL)"
           />
 
-          <p className="text-red-500">{errors.skills?.message}</p>
+          <p className="text-red-500">{errors.skillNames?.message}</p>
         </div>
 
         <div className="flex flex-col gap-2 my-3">

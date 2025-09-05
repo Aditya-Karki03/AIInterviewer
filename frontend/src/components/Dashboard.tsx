@@ -1,7 +1,10 @@
 import React from "react";
 import Sidebar from "./Sidebar";
+import useDashboard from "../hooks/useDashboard";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const practiceSessions = [
     {
       id: 1,
@@ -29,6 +32,22 @@ const Dashboard = () => {
     },
   ];
 
+  const handlePractice = () => {
+    navigate("/practice");
+  };
+
+  const { data, error, loading } = useDashboard();
+  if (error) {
+    alert("error");
+    return;
+  }
+  if (loading) {
+    return (
+      <div className="h-screen w-screen absolute z-30 bg-white/20 text-red-400">
+        Loading...
+      </div>
+    );
+  }
   return (
     <div className="flex flex-1 min-h-screen bg-gray-900 text-white">
       <Sidebar />
@@ -47,30 +66,44 @@ const Dashboard = () => {
             <div className="w-1/2 text-center">
               <p className="text-gray-400">Job Role</p>
               <p className="text-2xl font-bold text-neutral-300 ">
-                Software Engineer
+                {data?.data?.profileDetails?.job}
               </p>
             </div>
             <div className="w-1/2 text-center">
               <p className="text-gray-400">Expertise Level</p>
               <p className="text-2xl font-bold text-neutral-300 ">
-                Intermediate
+                {data?.data?.profileDetails?.experience}
               </p>
             </div>
           </div>
           <div className="flex justify-between p-4">
             <div className="w-1/2 text-center">
               <p className="text-gray-400">Skill</p>
-              <p className="text-2xl font-bold text-neutral-300 ">JavaScript</p>
+              <div className="flex gap-2 justify-center overflow-x-auto">
+                {data?.data?.skills?.map((skill) => (
+                  <p
+                    key={skill.skillName}
+                    className="text-2xl font-bold text-neutral-300 "
+                  >
+                    {skill.skillName}
+                  </p>
+                ))}
+              </div>
             </div>
             <div className="w-1/2 text-center">
               <p className="text-gray-400">Interview Type</p>
-              <p className="text-2xl font-bold text-neutral-300 ">Technical</p>
+              <p className="text-2xl font-bold text-neutral-300 ">
+                {data?.data?.profileDetails?.interviewType}
+              </p>
             </div>
           </div>
         </div>
         {/* start practice session btn */}
         <div className="mt-4">
-          <button className="w-full cursor-pointer rounded-lg bg-gradient-to-r from-purple-700 to-blue-700 px-4 py-2 text-white hover:bg-blue-500 transition text-lg tracking-wider">
+          <button
+            onClick={handlePractice}
+            className="w-full cursor-pointer rounded-lg bg-gradient-to-r from-purple-700 to-blue-700 px-4 py-2 text-white hover:bg-blue-500 transition text-lg tracking-wider"
+          >
             Start Practice Session
           </button>
         </div>
