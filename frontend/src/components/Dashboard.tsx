@@ -1,8 +1,10 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import useDashboard from "../hooks/useDashboard";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const practiceSessions = [
     {
       id: 1,
@@ -29,6 +31,11 @@ const Dashboard = () => {
       role: "Full Stack Developer",
     },
   ];
+
+  const handlePractice = () => {
+    navigate("/practice");
+  };
+
   const { data, error, loading } = useDashboard();
   if (error) {
     alert("error");
@@ -93,7 +100,10 @@ const Dashboard = () => {
         </div>
         {/* start practice session btn */}
         <div className="mt-4">
-          <button className="w-full cursor-pointer rounded-lg bg-gradient-to-r from-purple-700 to-blue-700 px-4 py-2 text-white hover:bg-blue-500 transition text-lg tracking-wider">
+          <button
+            onClick={handlePractice}
+            className="w-full cursor-pointer rounded-lg bg-gradient-to-r from-purple-700 to-blue-700 px-4 py-2 text-white hover:bg-blue-500 transition text-lg tracking-wider"
+          >
             Start Practice Session
           </button>
         </div>

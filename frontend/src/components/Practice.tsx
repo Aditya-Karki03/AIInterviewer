@@ -1,9 +1,19 @@
-import { questions } from "../utils/jsons";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
+import usePractice from "../hooks/usePractice";
+import Loader from "./loader";
 
 const Practice = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const { questions, error, loading } = usePractice();
+  if (error) {
+    alert(error);
+    return;
+  }
+  if (loading) {
+    return <Loader />;
+  }
+
   const handleBtn = () => {
     setCurrentQuestionIndex((currentQuestionIndex) =>
       currentQuestionIndex < 9 ? currentQuestionIndex + 1 : currentQuestionIndex
@@ -17,12 +27,12 @@ const Practice = () => {
           <h2 className="text-2xl font-bold">PRACTICE SESSION</h2>
           <h2>
             <span className="font-bold">{currentQuestionIndex + 1}</span> /{" "}
-            <span className="text-2xl">{questions.length}</span>
+            <span className="text-2xl">{questions?.length}</span>
           </h2>
         </div>
         <div className="mt-20 max-w-3xl mx-auto">
           <p className="QUESTION  text-center text-3xl my-5 text-wrap">
-            {questions[currentQuestionIndex].question}
+            {questions?.[currentQuestionIndex]}
           </p>
           <textarea
             name="answer"
