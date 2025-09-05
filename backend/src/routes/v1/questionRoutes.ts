@@ -17,3 +17,9 @@ questionRouter.get("/get-questions", questionController.getGeneratedQuestions);
 
 // submit the answers
 questionRouter.post("/send-answer/:id", questionController.submitAnswers);
+
+// questions that were skipped
+questionRouter.get("/skipped-questions", questionController.skippedQuestions);
+
+// questions that were left to be reviewed
+questionRouter.get("/review-questions", questionController.reviewQuestions);

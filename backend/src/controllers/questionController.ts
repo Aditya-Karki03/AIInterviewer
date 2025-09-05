@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import db from "../db/db.schema";
 import { fail, ok } from "../utils/utils";
 import { GoogleGenAI } from "@google/genai";
+import { FileChartColumn } from "lucide-react";
 
 interface SkillName {
   skillName: string;
@@ -175,6 +176,49 @@ Example:
         return fail(res, "No record found to update", 407);
       }
       return ok(res, { updated: true }, 201);
+    } catch (error) {
+      console.log(error);
+      return fail(res, "Internal Server Error", 500);
+    }
+  }
+
+  // get skipped questions on a particular practice session
+  async skippedQuestions(req: Request, res: Response) {
+    // we need the practiceId on this one
+    const { practiceId } = req.params;
+    const { id } = req.user;
+    if (!practiceId) return fail(res, "Practice Id is required", 402);
+
+    try {
+      const getSkippedQuesQuery = db.prepare(
+        "SELECT id, question FROM qa WHERE practiceId=? AND userId=? AND skip=1"
+      );
+      const result = getSkippedQuesQuery.all(practiceId, id);
+      if (result.length == 0) return ok(res, "No Questions where skipped", 201);
+      console.log(result);
+      return ok(res, result, 201);
+    } catch (error) {
+      console.log(error);
+      return fail(res, "Internal Server Error", 500);
+    }
+  }
+
+  // get reviewed questions on a particular practice session
+  async reviewQuestions(req: Request, res: Response) {
+    // we need the practiceId on this one
+    const { practiceId } = req.params;
+    const { id } = req.user;
+    if (!practiceId) return fail(res, "Practice Id is required", 402);
+
+    try {
+      const getReviewedQuesQuery = db.prepare(
+        "SELECT id, question FROM qa WHERE practiceId=? AND userId=? AND review=1"
+      );
+      const result = getReviewedQuesQuery.all(practiceId, id);
+      if (result.length == 0)
+        return ok(res, "No Questions where left for review", 201);
+      console.log(result);
+      return ok(res, result, 201);
     } catch (error) {
       console.log(error);
       return fail(res, "Internal Server Error", 500);
