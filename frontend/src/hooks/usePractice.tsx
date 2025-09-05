@@ -29,8 +29,6 @@ const usePractice = () => {
         if (!response.ok) return new Error("Network error");
         const result = (await response.json()) as Data;
         setQuestions(result?.data);
-        console.log(questions); //null output
-        console.log(result);
         setLoading(false);
       } catch (err) {
         setError(err as string);
