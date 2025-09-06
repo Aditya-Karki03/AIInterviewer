@@ -128,7 +128,7 @@ const Dashboard = () => {
                     </p>
                   </div>
                   <button className=" cursor-pointer rounded-lg bg-gradient-to-r from-purple-700 to-blue-700 px-4  text-white hover:bg-blue-500 transition text-lg tracking-wider">
-                    View Notes
+                    View Feedback
                   </button>
                 </li>
               ))}

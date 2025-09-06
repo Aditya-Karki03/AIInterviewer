@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 
+interface Questions {
+  id: number;
+  question: string;
+}
+
 interface Data {
   ok: boolean;
-  data: string[];
+  data: Questions[];
 }
 
 const usePractice = () => {
-  const [questions, setQuestions] = useState<string[] | null>(null);
+  const [questions, setQuestions] = useState<Questions[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
