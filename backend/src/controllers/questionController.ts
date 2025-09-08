@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import db from "../db/db.schema";
 import { fail, ok } from "../utils/utils";
 import { GoogleGenAI } from "@google/genai";
-import { FileChartColumn } from "lucide-react";
 
 interface SkillName {
   skillName: string;
