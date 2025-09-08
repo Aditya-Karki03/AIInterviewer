@@ -6,10 +6,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./components/Login.tsx";
 import Register from "./components/Register.tsx";
 import Dashboard from "./components/Dashboard.tsx";
-import Sidebar from "./components/Sidebar.tsx";
 import ProfileSetup from "./components/ProfileSetup.tsx";
 import Practice from "./components/Practice.tsx";
-// import ProtectedRoutes from "./components/ProctedRoutes.tsx";
+import ProtectedRoutes from "./components/ProctedRoutes.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,33 +26,25 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          // <ProtectedRoutes>
-          <Dashboard />
-          // </ProtectedRoutes>
-        ),
-      },
-      {
-        path: "/sidebar",
-        element: (
-          // <ProtectedRoutes>
-          <Sidebar />
-          // </ProtectedRoutes>
+          <ProtectedRoutes>
+            <Dashboard />
+          </ProtectedRoutes>
         ),
       },
       {
         path: "/set-profile",
         element: (
-          // <ProtectedRoutes>
-          <ProfileSetup />
-          // </ProtectedRoutes>
+          <ProtectedRoutes>
+            <ProfileSetup />
+          </ProtectedRoutes>
         ),
       },
       {
         path: "/practice",
         element: (
-          // <ProtectedRoutes>
-          <Practice />
-          // </ProtectedRoutes>
+          <ProtectedRoutes>
+            <Practice />
+          </ProtectedRoutes>
         ),
       },
     ],

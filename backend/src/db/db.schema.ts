@@ -36,7 +36,7 @@ export const skillProfileTableCmd = `CREATE TABLE IF NOT EXISTS skill_profile(
     skillId INTEGER NOT NULL,
     FOREIGN KEY (profileId) REFERENCES profiles (id),
     FOREIGN KEY (skillId) REFERENCES skills (id),
-    PRIMARY KEY (profileId, skillId)
+    PRIMARY KEY (profileId, skillId) ON CONFLICT IGNORE
 );`;
 
 // if user asks to review than their review needs to be stored in separate table
