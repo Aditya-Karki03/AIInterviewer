@@ -4,6 +4,7 @@ import { authRouter } from "./authRoutes";
 import { profileRouter } from "./profileRoutes";
 import { dashboardRoutes } from "./dashboardRoutes";
 import { questionRouter } from "./questionRoutes";
+import { feedbackRouter } from "./feedbackRoutes";
 
 const appRouterV1 = express.Router();
 
@@ -14,10 +15,13 @@ appRouterV1.use("/api/v1/user", authRouter);
 // userAuth middleware to ensure only authenticated users can access this route
 appRouterV1.use("/api/v1/profile", userAuth, profileRouter);
 
-//dashboard route
+// dashboard route
 appRouterV1.use("/api/v1/dashboard", userAuth, dashboardRoutes);
 
-//question route
+// question route
 appRouterV1.use("/api/v1/question", userAuth, questionRouter);
+
+// feedback route
+appRouterV1.use("/api/v1/feedback", userAuth, feedbackRouter);
 
 export default appRouterV1;
